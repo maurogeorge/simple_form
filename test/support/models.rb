@@ -172,6 +172,10 @@ class User
     end
   end
 
+  def self.statuses
+    { 'active' => 0, 'archived' => 1 }
+  end
+
   def errors
     @errors ||= begin
       errors = ActiveModel::Errors.new(self)

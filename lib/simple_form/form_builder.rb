@@ -191,6 +191,18 @@ module SimpleForm
       input(attribute, options.merge(reflection: reflection))
     end
 
+    def enum(enum, options = {})
+      model = self.object_name.classify.constantize
+      enum_mapping_name = enum.to_s.pluralize
+
+      options[:as] ||= :select
+      options[:collection] ||= model.send(enum_mapping_name).keys.map(&:to_sym)
+
+      attribute = enum
+
+      input(attribute, options)
+    end
+
     # Creates a button:
     #
     #   form_for @user do |f|
