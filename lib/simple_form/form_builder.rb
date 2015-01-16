@@ -192,13 +192,19 @@ module SimpleForm
     end
 
     def enum(enum, options = {})
-      model = self.object_name.classify.constantize
+      options = options.dup
       enum_mapping_name = enum.to_s.pluralize
+      attribute = enum
+
+      raise ArgumentError, "Enum cannot be used in forms not associated with an object" unless @object
+
+      model = self.object_name.classify.constantize
+      raise ArgumentError, "Enum #{enum_mapping_name} not found" unless model.respond_to?(enum_mapping_name)
+
+      enum_mapping = model.send(enum_mapping_name).keys.map(&:to_sym)
 
       options[:as] ||= :select
-      options[:collection] ||= model.send(enum_mapping_name).keys.map(&:to_sym)
-
-      attribute = enum
+      options[:collection] ||= options.fetch(:collection) { enum_mapping }
 
       input(attribute, options)
     end
