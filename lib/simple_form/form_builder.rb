@@ -191,6 +191,9 @@ module SimpleForm
       input(attribute, options.merge(reflection: reflection))
     end
 
+    # Drop the implementation because of
+    # https://github.com/plataformatec/simple_form/issues/1063
+    # https://github.com/rails/rails/issues/13971#issuecomment-34530922
     def enum(enum, options = {})
       options = options.dup
       enum_mapping_name = enum.to_s.pluralize
